@@ -1,6 +1,6 @@
 const { io } = require("../ioServer");
 
-const users = [];
+let users = [];
 
 function socketInit(socket) {
 	console.log("user connected");
@@ -79,7 +79,7 @@ function socketInit(socket) {
 		);
 	});
 
-	socket.on("start_quiz", ({ room, username, data }) => {
+	socket.on("start_quiz", ({ room, data }) => {
 		// sending all clients except sender
 		users = users.map((user) => {
 			return { ...user, data };
