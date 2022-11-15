@@ -10,7 +10,7 @@ function socketInit(socket) {
 	socket.on(
 		"create game",
 		({ room, category, difficulty, host, questions }) => {
-			console.log(`game created with the code ${room}`);
+			console.log(`Game created with the code ${room}`);
 			const state = new QuizState(category, difficulty, host, room, questions);
 			socket.join(room);
 			io.to(room).emit("change state", state);
