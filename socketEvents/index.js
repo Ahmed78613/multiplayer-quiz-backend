@@ -1,6 +1,6 @@
 const { io } = require("../ioServer");
 
-const user = {};
+const users = [];
 
 function socketInit(socket) {
 	console.log("user connected");
