@@ -5,11 +5,8 @@ const { socketInit } = require("./socketEvents");
 const bodyParser = require("body-parser");
 
 // Middleware
-app.use(bodyParser.json());
-
-//Server
 app.use(cors());
-app.use(express.json());
+app.use(bodyParser.json());
 
 // leaderboards route
 const Leaderboards = require("./routes/Leaderboards");
