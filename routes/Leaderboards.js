@@ -4,7 +4,7 @@ const {
 	welcome,
 	getLeaderboards,
 	postIntoLeaderboards,
-} = require("../Controllers/Leaderboards");
+} = require("../controllers/Leaderboards");
 
 router.route("/").get(welcome);
 router.route("/leaderboards").get(getLeaderboards).post(postIntoLeaderboards);
