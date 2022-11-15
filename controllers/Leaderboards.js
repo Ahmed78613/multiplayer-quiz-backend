@@ -1,4 +1,6 @@
-const leaderboardsModel = require("../");
+const leaderboardsModel = require("../models/leaderboards");
+
+const welcome = (req, res) => res.json({ result: "Mandem Quiz API" });
 
 const getLeaderboards = async (req, res) => {
 	try {
@@ -18,4 +20,4 @@ const postIntoLeaderboards = async (req, res) => {
 	}
 };
 
-module.exports = { getLeaderboards, postIntoLeaderboards };
+module.exports = { welcome, getLeaderboards, postIntoLeaderboards };
