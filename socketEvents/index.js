@@ -1,10 +1,12 @@
 const { io } = require("../ioServer");
 
-const users = [];
+let users = [];
+let userResults = [];
 
 function socketInit(socket) {
 	console.log("user connected");
-	socket.on("create_room", ({ username }) => {
+	socket.on("create_room", ({ username, category, difficulty }) => {
+		console.log(category, difficulty);
 		// Generate Random Room number
 		const room = Math.floor(Math.random() * 10);
 		// Crate User
@@ -14,6 +16,9 @@ function socketInit(socket) {
 			id: socket.id,
 			host: true,
 			data: [],
+			category: category,
+			difficulty: difficulty,
+			score: 0,
 		};
 		// Push User To array
 		users.push(user);
@@ -34,6 +39,7 @@ function socketInit(socket) {
 			id: socket.id,
 			host: false,
 			data: [],
+			score: 0,
 		};
 		// Push User To array
 		users.push(user);
@@ -79,13 +85,29 @@ function socketInit(socket) {
 		);
 	});
 
-	socket.on("start_quiz", ({ room, username, data }) => {
-		// sending all clients except sender
-		users = users.map((user) => {
-			return { ...user, data };
-		});
-		console.log(users);
-		socket.to(room).emit("game_started", users);
+	// socket.on("start_quiz", ({ room, username, data }) => {
+	// 	// sending all clients except sender
+	// 	users = users.map((user) => {
+	// 		return { ...user, data };
+	// 	});
+	// 	console.log(users);
+	// 	socket.to(room).emit("game_started", users);
+	// });
+
+	socket.on("send_scores", ({ username, room, score }) => {
+		// Crate User
+		const user = {
+			username: username,
+			room: room,
+			score: score,
+		};
+		// Push User To array
+		userResults.push(user);
+		// Send All Users Array
+		socket.to(room).emit(
+			"update_room",
+			userResults.filter((users) => users.room == room)
+		);
 	});
 }
 
