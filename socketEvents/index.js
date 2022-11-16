@@ -4,9 +4,7 @@ let users = [];
 let userResults = [];
 
 function socketInit(socket) {
-	console.log("user connected");
 	socket.on("create_room", ({ username, category, difficulty }) => {
-		console.log(category, difficulty);
 		// Generate Random Room number
 		const room = Math.floor(Math.random() * 10);
 		// Crate User
@@ -70,29 +68,20 @@ function socketInit(socket) {
 		// Leave Room
 		socket.disconnect();
 	});
-	socket.on("disconnect", () => {});
 
 	socket.on("disconnect", () => {
-		console.log("disconnect running");
+		socket.leave(room);
 		// Get Disconnect User Room
 		const disconnectUser = users.filter((users) => users.id === socket.id)[0];
 		// Remove User from Room
 		users = users.filter((user) => user.id !== socket.id);
+
 		// Send Updated Users Array
 		io.sockets.in(disconnectUser?.room).emit(
 			"update_room",
 			users.filter((user) => user.room === disconnectUser?.room)
 		);
 	});
-
-	// socket.on("start_quiz", ({ room, username, data }) => {
-	// 	// sending all clients except sender
-	// 	users = users.map((user) => {
-	// 		return { ...user, data };
-	// 	});
-	// 	console.log(users);
-	// 	socket.to(room).emit("game_started", users);
-	// });
 
 	socket.on("send_scores", ({ username, room, score }) => {
 		// Crate User
@@ -112,39 +101,3 @@ function socketInit(socket) {
 }
 
 module.exports = { socketInit };
-
-// console.log("user connected");
-
-// socket.on("disconnect", () => console.log("user disconnected"));
-
-// socket.on(
-// 	"create game",
-// 	({ room, category, difficulty, host, questions }) => {
-// 		console.log(`Game created with the code ${room}`);
-// 		const state = new QuizState(category, difficulty, host, room, questions);
-// 		socket.join(room);
-// 		io.to(room).emit("change state", state);
-// 	}
-// );
-
-// socket.on("join game", ({ room, username }) => {
-// 	console.log(`User with ID: ${username} joined room: ${room}`);
-// 	socket.join(room);
-// 	socket.to(room).emit("user joining lobby", username);
-// });
-
-// socket.on("send_message", (data) => {
-// 	socket.to(data.room).emit("receive_message", data);
-// });
-
-// socket.on("send state to players", (state) => {
-// 	io.to(state.room).emit("change state", state);
-// });
-
-// socket.on("update player score", ({ room, player, score }) => {
-// 	socket.to(room).emit("update all scores", { player, score });
-// });
-
-// socket.on("finish quiz", ({ room, player }) => {
-// 	io.to(room).emit("update opponent completion", player);
-// });
