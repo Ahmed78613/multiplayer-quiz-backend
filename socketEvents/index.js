@@ -1,7 +1,10 @@
 const { io } = require("../ioServer");
 
 let users = [];
+<<<<<<< HEAD
 let userResults = [];
+=======
+>>>>>>> d50d5b5e095f18264498a94873c5e579fc157461
 
 function socketInit(socket) {
 	console.log("user connected");
