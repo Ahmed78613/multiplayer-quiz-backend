@@ -4,7 +4,6 @@ let users = [];
 let userResults = [];
 
 function socketInit(socket) {
-	console.log("user connected");
 	socket.on("create_room", ({ username, category, difficulty }) => {
 		console.log(category, difficulty);
 		// Generate Random Room number
@@ -55,31 +54,6 @@ function socketInit(socket) {
 		io.to(host.id).emit(
 			"update_room",
 			users.filter((users) => users.room == room)
-		);
-	});
-
-	socket.on("leave_room", ({ room, username }) => {
-		// Remove User from Array
-		users = users.filter(
-			(users) => users.username !== username && users.room === room
-		);
-		// Leave Room
-		socket.leave(room);
-		// Send Updated Users Array
-		socket.to(room).emit("update_room", users);
-		// Leave Room
-		socket.disconnect();
-	});
-
-	socket.on("disconnect", () => {
-		// Get Disconnect User Room
-		const disconnectUser = users.filter((users) => users.id === socket.id)[0];
-		// Remove User from Room
-		users = users.filter((user) => user.id !== socket.id);
-		// Send Updated Users Array
-		io.sockets.in(disconnectUser?.room).emit(
-			"update_room",
-			users.filter((user) => user.room === disconnectUser?.room)
 		);
 	});
 
